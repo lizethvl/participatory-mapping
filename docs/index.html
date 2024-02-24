@@ -40,7 +40,7 @@
             padding: 10px;
         }
 
-        #name {
+        #name, #email{
             width: 100%;
             height: 20px;
             margin-bottom: 10px;
@@ -64,20 +64,13 @@
     
     <!-- Information box -->
     <div id="info">
-        <h3>A Minimum Viable Participatory Mapping Project</h3>
-        <h4>Bo Zhao | University of Washington </h4>
+        <h3>The UW Experience: A Participatory Map</h3>
+        <h4>Lizeth Velderrain-Lopez | University of Washington </h4>
         <!-- Introduction to the participatory mapping solution -->
         <p>
-            This map is a minimum viable solution to participatory mapping.
-            Users can contribute their local knowledge by clicking on the map,
-            submitting their information, and viewing it represented as a red dot.
-            Existing contributions can also be viewed as red dots. While this map only offers
-            basic functionality, it can be expanded or repurposed to build your own participatory mapping projects. To help you envision what this map can assist you, you can take a look at a few existing projects, such as <a href="https://hgis.uw.edu/lgbtqspaces/" target="_blank"><b>Shifting LGBTQ+ spaces</b></a>,
-            <a href="https://hgis.uw.edu/chop"> <b>Archiving the CHOP</b></a> and <a href="https://www.queeringthemap.com/" target="_blank"><b>Queering the Map</b></a>.
-            An instruction can be found 
-            <a href="https://www.github.com/jakobzhao/participatory-mapping" target="_blank">here</a>.
-            <i>Last update: June 23, 2023</i>
+            This participatory map is focused on the UW community. Users can contribute any information or experience they have had during their academic journey at the University of Washington. By clicking on the map, users can click on any location on the map and submit their information, which will then appear as a marker along with other submissions on the map.
         </p> 
+        <i>Last updated: February 23, 2024</i>
     </div>
     
     <!-- JavaScript code for the interactive map and data submission -->
@@ -94,10 +87,10 @@
         // Create a new map instance
         let map = new maplibregl.Map({
             container: 'map', // container id
-            style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=Cusoe5zmfmn26glFoeoe', // style URL
-            center: [-122.3321, 47.6062], // starting position [lng, lat]
+            style: 'https://api.maptiler.com/maps/a381b938-e0b8-4afc-b7fa-aef8b3c3aa89/style.json?key=NlKsxF5RX7skM3dKvYlZ', // style URL
+            center: [-122.31, 47.654], // starting position [lng, lat]
             // pitch: 45, // pitch in degrees
-            zoom: 12 // starting zoom
+            zoom: 14.75 // starting zoom
         });
 
         // Fetch existing records when the window is loaded
@@ -137,7 +130,7 @@
                 'source': 'places',
                 'paint': {
                     'circle-radius': 6,
-                    'circle-color': '#B42222'
+                    'circle-color': '#4b2d83'
                 }
             });
         });
@@ -149,10 +142,11 @@
             var coordinates = e.features[0].geometry.coordinates;
             var content = e.features[0].properties.content;
             var contributor = e.features[0].properties.contributor;
+            var email = e.features[0].properties.email;
 
             popup = new maplibregl.Popup()
                 .setLngLat(coordinates)
-                .setHTML("<p><b>" + contributor + "</b> <i>said:</i> " + content + "</p>")
+                .setHTML("<p><b>" + contributor + "</b> <i>said:</i> " + content + "<br>" + "Contact: " + email + "</p>")
                 .addTo(map);
         });
 
@@ -169,7 +163,7 @@
             }
 
             // Create the HTML content for the contribution popup
-            const popupContent = '<div id="popup"><input type="text" id="name" placeholder="Input your name here..."><input type="text" id="content" placeholder="Input your message here..."><button id="submit">submit</button></div>';
+            const popupContent = '<div id="popup"><input type="text" id="name" placeholder="Name:"><input type="text" id="content" placeholder="Input your message here..."><input type="text" id="email" placeholder="Optional: Include your email here"><button id="submit">submit</button></div>';
 
             // Create a new popup and set its content
             popup = new maplibregl.Popup({ closeOnClick: false })
@@ -186,12 +180,14 @@
         async function submitNewRecord() {
             let contributor = document.getElementById('name').value;
             let content = document.getElementById('content').value;
+            let email = document.getElementById('email').value;
             let lngLat = popup.getLngLat();
 
             // Create a new URLSearchParams object and append the data to it
             let newRecord = new URLSearchParams();
             newRecord.append('contributor', contributor);
             newRecord.append('content', content);
+            newRecord.append('email', email);
             newRecord.append('lng', lngLat.lng);
             newRecord.append('lat', lngLat.lat);
 
@@ -215,6 +211,7 @@
                     'properties': {
                         'contributor': contributor,
                         'content': content,
+                        'email': email,
                     },
                     'geometry': {
                         'type': 'Point',
