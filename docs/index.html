@@ -70,7 +70,7 @@
         <p>
             This participatory map is focused on the UW community. Users can contribute any information or experience they have had during their academic journey at the University of Washington. By clicking on the map, users can click on any location on the map and submit their information, which will then appear as a marker along with other submissions on the map.
         </p> 
-        <i>Last updated: February 23, 2024</i>
+        <i>Last updated: February 25, 2024</i>
     </div>
     
     <!-- JavaScript code for the interactive map and data submission -->
@@ -95,7 +95,7 @@
 
         // Fetch existing records when the window is loaded
         window.addEventListener("load", async function () {
-            let response = await fetch('https://pmap-28a9a9408e2b.herokuapp.com/api/get-record', {
+            let response = await fetch('https://geog458-lab5-8e4a3aaaa893.herokuapp.com/api/get-record', {
                 method: 'GET'
             });
 
@@ -199,7 +199,7 @@
 
             try {
                 // Send the POST request to add the new record
-                await fetch('https://pmap-28a9a9408e2b.herokuapp.com/api/add-record', settings);
+                await fetch('https://geog458-lab5-8e4a3aaaa893.herokuapp.com/api/add-record', settings);
             } catch (err) {
                 // Handle any errors that occur during the request
                 console.error(err);
